@@ -1,0 +1,35 @@
+{
+  "note": "Terminal text is the real stdout and stderr of each command, captured by tools/record_demo.py. Reveal speed is paced by each command's measured wall time. This is a replay, not a live screen recording.",
+  "segments": [
+    {
+      "command": "ls data/fixtures/join-naive-noaqe/eventlog_v2_*/ && du -sh data/fixtures/join-naive-noaqe",
+      "exit_code": 0,
+      "measured_wall_time_s": 0.006
+    },
+    {
+      "command": "skewdoc diagnose data/fixtures/join-naive-noaqe",
+      "exit_code": 0,
+      "measured_wall_time_s": 0.085
+    },
+    {
+      "command": "skewdoc diagnose data/fixtures/agg-naive-noaqe | head -8",
+      "exit_code": 0,
+      "measured_wall_time_s": 0.083
+    },
+    {
+      "command": "skewdoc diagnose data/fixtures/join-naive-noaqe --fail-on-skew >/dev/null; echo \"exit=$?\"; skewdoc diagnose data/fixtures/join-broadcast-noaqe --fail-on-skew >/dev/null; echo \"exit=$?\"",
+      "exit_code": 0,
+      "measured_wall_time_s": 0.155
+    },
+    {
+      "command": "python tools/show_matrix.py docs/experiments/join_matrix.json",
+      "exit_code": 0,
+      "measured_wall_time_s": 0.034
+    },
+    {
+      "command": "python tools/check_numbers.py | tail -2",
+      "exit_code": 0,
+      "measured_wall_time_s": 0.038
+    }
+  ]
+}

@@ -1,0 +1,251 @@
+{
+  "generated_at": "2026-08-17T15:05:07+00:00",
+  "environment": {
+    "python": "3.11.15",
+    "platform": "Linux-6.18.5-fc-v20-x86_64-with-glibc2.39"
+  },
+  "how_to_use": "Every value here was produced by the command in its source field. tools/check_numbers.py asserts that each one still appears in the documents listed under checked_documents, inside its anchor phrase, so a stale claim fails CI.",
+  "checked_documents": [
+    "README.md",
+    "docs/adr/ADR-001-local-mode-and-what-it-proves.md",
+    "docs/adr/ADR-002-classification-thresholds.md",
+    "docs/adr/ADR-003-measurement-protocol.md"
+  ],
+  "metrics": {
+    "naive_verdict": {
+      "value": "key_skew",
+      "display": [
+        "key skew"
+      ],
+      "source": "skewdoc diagnose data/fixtures/join-naive-noaqe",
+      "note": "",
+      "anchors": [
+        "diagnosed as {}"
+      ]
+    },
+    "naive_time_ratio": {
+      "value": 15.43,
+      "display": [
+        "15.43"
+      ],
+      "source": "skewdoc diagnose data/fixtures/join-naive-noaqe",
+      "note": "",
+      "anchors": [
+        "ran {}x the median"
+      ]
+    },
+    "naive_bytes_ratio": {
+      "value": 41.71,
+      "display": [
+        "41.71"
+      ],
+      "source": "skewdoc diagnose data/fixtures/join-naive-noaqe",
+      "note": "",
+      "anchors": [
+        "read {}x the median bytes"
+      ]
+    },
+    "naive_slowest_task_share": {
+      "value": 0.1329,
+      "display": [
+        "13%"
+      ],
+      "source": "skewdoc diagnose data/fixtures/join-naive-noaqe",
+      "note": "",
+      "anchors": [
+        "{} of the stage's task time"
+      ]
+    },
+    "naive_tasks": {
+      "value": 64,
+      "display": [
+        "64"
+      ],
+      "source": "skewdoc diagnose data/fixtures/join-naive-noaqe",
+      "note": "",
+      "anchors": [
+        "one task per {} shuffle partitions"
+      ]
+    },
+    "broadcast_verdict": {
+      "value": "healthy",
+      "display": [
+        "healthy"
+      ],
+      "source": "skewdoc diagnose data/fixtures/join-broadcast-noaqe",
+      "note": "",
+      "anchors": [
+        "broadcast run is {}"
+      ]
+    },
+    "agg_naive_verdict": {
+      "value": "healthy",
+      "display": [
+        "healthy"
+      ],
+      "source": "skewdoc diagnose data/fixtures/agg-naive-noaqe",
+      "note": "",
+      "anchors": [
+        "composable aggregation is {}"
+      ]
+    },
+    "join_naive_ms": {
+      "value": 1898.8,
+      "display": [
+        "1899"
+      ],
+      "source": "skewdoc compare --workload join_skew",
+      "note": "median of repeated runs after a discarded warmup",
+      "anchors": [
+        "naive join takes {} ms"
+      ]
+    },
+    "join_broadcast_speedup": {
+      "value": 6.51,
+      "display": [
+        "6.51"
+      ],
+      "source": "skewdoc compare --workload join_skew",
+      "note": "",
+      "anchors": [
+        "broadcast is {}x"
+      ]
+    },
+    "join_salted_speedup": {
+      "value": 0.81,
+      "display": [
+        "0.81"
+      ],
+      "source": "skewdoc compare --workload join_skew",
+      "note": "",
+      "anchors": [
+        "salting is {}x"
+      ]
+    },
+    "join_isolated_speedup": {
+      "value": 1.32,
+      "display": [
+        "1.32"
+      ],
+      "source": "skewdoc compare --workload join_skew",
+      "note": "",
+      "anchors": [
+        "isolating the hot keys is {}x"
+      ]
+    },
+    "join_aqe_speedup": {
+      "value": 1.52,
+      "display": [
+        "1.52"
+      ],
+      "source": "skewdoc compare --workload join_skew",
+      "note": "",
+      "anchors": [
+        "adaptive execution alone is {}x"
+      ]
+    },
+    "agg_salted_speedup": {
+      "value": 0.39,
+      "display": [
+        "0.39"
+      ],
+      "source": "skewdoc compare --workload agg_skew",
+      "note": "",
+      "anchors": [
+        "salting a composable aggregation is {}x"
+      ]
+    },
+    "agg_wide_salted_speedup": {
+      "value": 0.85,
+      "display": [
+        "0.85"
+      ],
+      "source": "skewdoc compare --workload agg_wide",
+      "note": "",
+      "anchors": [
+        "salting it is {}x"
+      ]
+    },
+    "agg_wide_aqe_speedup": {
+      "value": 2.24,
+      "display": [
+        "2.24"
+      ],
+      "source": "skewdoc compare --workload agg_wide",
+      "note": "",
+      "anchors": [
+        "adaptive execution gives {}x"
+      ]
+    },
+    "cells_measured": {
+      "value": 16,
+      "display": [
+        "16"
+      ],
+      "source": "the three comparison JSON files",
+      "note": "",
+      "anchors": [
+        "{} strategy cells"
+      ]
+    },
+    "cells_where_salting_won": {
+      "value": 0,
+      "display": [
+        "0"
+      ],
+      "source": "the three comparison JSON files",
+      "note": "groups are (workload, AQE setting); salting wins one by being its fastest strategy",
+      "anchors": [
+        "salting won {} of them"
+      ]
+    },
+    "severity_levels": {
+      "value": 4,
+      "display": [
+        "4"
+      ],
+      "source": "python benchmark/bench_severity.py",
+      "note": "",
+      "anchors": [
+        "{} severities"
+      ]
+    },
+    "warmup_over_median": {
+      "value": 3.4,
+      "display": [
+        "3.4"
+      ],
+      "source": "the warmup_ms and wall_ms fields of the comparison JSON",
+      "note": "the first run of a query against the median of the runs after it",
+      "anchors": [
+        "{}x slower than the median"
+      ]
+    },
+    "test_count": {
+      "value": 68,
+      "display": [
+        "68"
+      ],
+      "source": "pytest --junitxml",
+      "note": "",
+      "anchors": [
+        "badge/tests-{}-",
+        "{} tests and",
+        "{} tests, and"
+      ]
+    },
+    "line_coverage_pct": {
+      "value": 91.9,
+      "display": [
+        "92%",
+        "91.9%"
+      ],
+      "source": "pytest --cov=skewdoc --cov-report=xml",
+      "note": "",
+      "anchors": [
+        "badge/coverage-{}25-",
+        "{} line coverage"
+      ]
+    }
+  }
+}

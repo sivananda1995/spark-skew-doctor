@@ -1,0 +1,181 @@
+{
+  "fact_rows": 1500000,
+  "dim_rows": 20000,
+  "hot_keys": 1,
+  "salt": 16,
+  "shuffle_partitions": 64,
+  "rows": [
+    {
+      "hot_share": 0.2,
+      "strategy": "naive",
+      "aqe": false,
+      "wall_ms": 2399.8,
+      "verdict": "key_skew",
+      "time_ratio": 5.37,
+      "bytes_ratio": 12.9,
+      "total_task_ms": 8524.0,
+      "correct": true
+    },
+    {
+      "hot_share": 0.2,
+      "strategy": "naive",
+      "aqe": true,
+      "wall_ms": 1635.8,
+      "verdict": "healthy",
+      "time_ratio": 1.63,
+      "bytes_ratio": 0.0,
+      "total_task_ms": 6734.0,
+      "correct": true
+    },
+    {
+      "hot_share": 0.2,
+      "strategy": "salted",
+      "aqe": false,
+      "wall_ms": 2306.2,
+      "verdict": "healthy",
+      "time_ratio": 1.56,
+      "bytes_ratio": 0.0,
+      "total_task_ms": 9069.0,
+      "correct": true
+    },
+    {
+      "hot_share": 0.5,
+      "strategy": "naive",
+      "aqe": false,
+      "wall_ms": 1594.0,
+      "verdict": "key_skew",
+      "time_ratio": 27.31,
+      "bytes_ratio": 48.39,
+      "total_task_ms": 5029.0,
+      "correct": true
+    },
+    {
+      "hot_share": 0.5,
+      "strategy": "naive",
+      "aqe": true,
+      "wall_ms": 850.6,
+      "verdict": "healthy",
+      "time_ratio": 1.7,
+      "bytes_ratio": 0.0,
+      "total_task_ms": 4202.0,
+      "correct": true
+    },
+    {
+      "hot_share": 0.5,
+      "strategy": "salted",
+      "aqe": false,
+      "wall_ms": 1532.0,
+      "verdict": "healthy",
+      "time_ratio": 2.72,
+      "bytes_ratio": 0.0,
+      "total_task_ms": 7109.0,
+      "correct": true
+    },
+    {
+      "hot_share": 0.8,
+      "strategy": "naive",
+      "aqe": false,
+      "wall_ms": 1119.1,
+      "verdict": "key_skew",
+      "time_ratio": 35.06,
+      "bytes_ratio": 184.66,
+      "total_task_ms": 3737.0,
+      "correct": true
+    },
+    {
+      "hot_share": 0.8,
+      "strategy": "naive",
+      "aqe": true,
+      "wall_ms": 863.1,
+      "verdict": "partition_starvation",
+      "time_ratio": 1.37,
+      "bytes_ratio": 1.61,
+      "total_task_ms": 2817.0,
+      "correct": true
+    },
+    {
+      "hot_share": 0.8,
+      "strategy": "salted",
+      "aqe": false,
+      "wall_ms": 1455.1,
+      "verdict": "key_skew",
+      "time_ratio": 7.21,
+      "bytes_ratio": 12.97,
+      "total_task_ms": 5808.0,
+      "correct": true
+    },
+    {
+      "hot_share": 0.95,
+      "strategy": "naive",
+      "aqe": false,
+      "wall_ms": 1052.4,
+      "verdict": "key_skew",
+      "time_ratio": 51.27,
+      "bytes_ratio": 767.38,
+      "total_task_ms": 3290.0,
+      "correct": true
+    },
+    {
+      "hot_share": 0.95,
+      "strategy": "naive",
+      "aqe": true,
+      "wall_ms": 977.7,
+      "verdict": "partition_starvation",
+      "time_ratio": 1.0,
+      "bytes_ratio": 1.0,
+      "total_task_ms": 2103.0,
+      "correct": true
+    },
+    {
+      "hot_share": 0.95,
+      "strategy": "salted",
+      "aqe": false,
+      "wall_ms": 1204.1,
+      "verdict": "key_skew",
+      "time_ratio": 7.96,
+      "bytes_ratio": 26.9,
+      "total_task_ms": 5204.0,
+      "correct": true
+    }
+  ],
+  "summary": [
+    {
+      "hot_share": 0.2,
+      "naive_ms": 2399.8,
+      "naive_verdict": "key_skew",
+      "naive_time_ratio": 5.37,
+      "aqe_speedup": 1.47,
+      "salt_speedup": 1.04,
+      "aqe_beats_salt": true
+    },
+    {
+      "hot_share": 0.5,
+      "naive_ms": 1594.0,
+      "naive_verdict": "key_skew",
+      "naive_time_ratio": 27.31,
+      "aqe_speedup": 1.87,
+      "salt_speedup": 1.04,
+      "aqe_beats_salt": true
+    },
+    {
+      "hot_share": 0.8,
+      "naive_ms": 1119.1,
+      "naive_verdict": "key_skew",
+      "naive_time_ratio": 35.06,
+      "aqe_speedup": 1.3,
+      "salt_speedup": 0.77,
+      "aqe_beats_salt": true
+    },
+    {
+      "hot_share": 0.95,
+      "naive_ms": 1052.4,
+      "naive_verdict": "key_skew",
+      "naive_time_ratio": 51.27,
+      "aqe_speedup": 1.08,
+      "salt_speedup": 0.87,
+      "aqe_beats_salt": true
+    }
+  ],
+  "all_correct": true,
+  "salt_ever_beats_aqe": false
+}

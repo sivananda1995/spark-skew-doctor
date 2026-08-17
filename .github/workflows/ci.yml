@@ -1,0 +1,82 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  lint-and-test:
+    # The diagnosis path needs no JVM, so it is tested on every supported Python without one.
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+      - name: Install without the spark extra
+        run: pip install -e ".[dev]"
+      - name: Lint
+        run: ruff check .
+      - name: Test everything that does not need Spark
+        run: python -m pytest -m "not spark" --cov=skewdoc --cov-report=xml -q
+      - name: Fail if coverage of the JVM-free path drops below its floor
+        run: |
+          python - <<'PY'
+          import sys, xml.etree.ElementTree as ET
+          floor = 0.60
+          rate = float(ET.parse("coverage.xml").getroot().attrib["line-rate"])
+          print(f"line coverage without spark {rate:.2%} (floor {floor:.0%})")
+          sys.exit(0 if rate >= floor else 1)
+          PY
+
+  spark:
+    # The tests that prove the format this parser reads is the format Spark writes.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install with the spark extra
+        run: pip install -e ".[dev,spark]"
+      - name: Run the Spark-backed tests
+        run: python -m pytest -m spark -q
+      - name: Diagnose a job this run produced, end to end
+        run: |
+          skewdoc run --workload join_skew --strategy naive --fact-rows 300000 \
+            --dim-rows 3000 --shuffle-partitions 16 --repeats 1 || true
+          skewdoc diagnose build/eventlogs/join_skew-naive-noaqe --markdown build/diagnosis.md
+      - name: Publish the diagnosis to the job summary
+        if: always()
+        run: cat build/diagnosis.md >> "$GITHUB_STEP_SUMMARY" || true
+
+  receipts:
+    # Every number the README, the config, and the ADRs quote is re-measured from the committed
+    # event logs and comparison JSON, and a stale one fails the build.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install
+        run: pip install -e ".[dev]"
+      - name: Re-measure
+        run: python tools/collect_metrics.py --skip-tests
+      - name: Fail if a document disagrees
+        run: python tools/check_numbers.py

@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "skewdoc"
+version = "0.3.0"
+description = "Diagnose Spark data skew from the event log, then prove the fix with task metrics"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+dependencies = ["PyYAML>=6.0", "zstandard>=0.22"]
+
+[project.optional-dependencies]
+spark = ["pyspark>=3.5"]
+dev = ["pytest>=8", "pytest-cov>=5", "ruff>=0.6"]
+charts = ["matplotlib>=3.8"]
+
+[project.scripts]
+skewdoc = "skewdoc.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = [".", "src"]
+testpaths = ["tests"]
+addopts = "-q"
+markers = ["spark: needs a JVM and pyspark; runs a real Spark job"]
+
+[tool.ruff]
+line-length = 96
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM", "C4", "RET", "ARG"]
+ignore = ["B008"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["ARG001"]
+
+[tool.coverage.run]
+branch = true
+source = ["skewdoc"]
