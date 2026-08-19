@@ -105,7 +105,14 @@ Not on this workload at any severity. The sweep holds everything constant and va
 
 ## Architecture
 
-```mermaid
+<img src="docs/diagrams/architecture.svg" alt="Architecture diagram: the pipeline from committed inputs through to the report" width="100%">
+
+<details>
+<summary>the diagram source, and why this is an image</summary>
+
+GitHub renders `mermaid` fences itself, and when it works the source is the picture. It does not always work: this diagram parses and renders with mermaid 10 and 11 locally, and GitHub showed `Unable to render rich display: Cannot read properties of undefined (reading 'render')`, which is a failure inside their renderer rather than a syntax error here. So the picture is generated once by `tools/render_diagrams.py`, committed, and embedded, which renders identically on GitHub, in an editor preview, in a PDF and offline. The source below is in a plain fence so nothing tries to render it, and regenerating the image after editing it is one command.
+
+```mermaid-source name=architecture
 flowchart LR
   subgraph source[Any Spark job, anywhere]
     A[(spark.eventLog.dir<br/>JSON, often .zstd, often rolling)]
@@ -141,6 +148,8 @@ flowchart LR
   J --> K --> L --> M --> N
   N --> D
 ```
+
+</details>
 
 ## Quickstart
 

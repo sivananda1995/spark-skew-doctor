@@ -1,0 +1,8 @@
+{
+  "theme": "neutral",
+  "source": "README.md",
+  "diagrams": [
+    "architecture"
+  ],
+  "note": "rendered from the mermaid-source fences in the README by tools/render_diagrams.py; committed so the picture does not depend on a renderer this repository does not control"
+}
