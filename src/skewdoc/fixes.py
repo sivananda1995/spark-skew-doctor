@@ -212,8 +212,12 @@ def salted_aggregation(fact, salt: int, key: str = "key", aggregation: str = "su
     definition, so the only way to split the work is to aggregate partially and combine, which
     changes the query rather than the plan.
     """
-    from pyspark.sql import functions as F
-
+    # Validated before pyspark is imported, and the order is load-bearing twice. A caller who
+    # asked for an average gets the error at once rather than after a JVM has started, and the
+    # rule is a property of the aggregation rather than of Spark, so the test that pins it runs
+    # on a machine with no JVM. With the import first, that test failed with ModuleNotFoundError
+    # in the JVM-free CI job while passing on any laptop that had pyspark installed: green
+    # locally, red in CI, from an import placed one line too early.
     if aggregation not in COMPOSABLE:
         raise WorkloadError(
             f"{aggregation!r} cannot be computed in two stages. Only {sorted(COMPOSABLE)} "
@@ -221,6 +225,8 @@ def salted_aggregation(fact, salt: int, key: str = "key", aggregation: str = "su
             "be combined from partial counts. Use a sketch (approx_count_distinct) or accept "
             "the single-stage plan."
         )
+
+    from pyspark.sql import functions as F
     salted = fact.withColumn("_salt", _salt_column(salt))
     partial = salted.groupBy(key, "_salt").agg(
         F.sum("amount").alias("_amount"),
