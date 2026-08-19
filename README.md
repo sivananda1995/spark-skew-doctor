@@ -3,7 +3,7 @@
 **Reads a Spark job's own event log, says whether a stage is skewed and — the part that matters — whether it is *key* skew or something a skew fix cannot touch. Then it runs the fixes against each other and reports which one actually won, which on this workload was not the one everybody writes.**
 
 [![ci](https://github.com/sivananda1995/spark-skew-doctor/actions/workflows/ci.yml/badge.svg)](https://github.com/sivananda1995/spark-skew-doctor/actions/workflows/ci.yml)
-[![tests 68](https://img.shields.io/badge/tests-68-2a78d6)](#tests-coverage-and-receipts)
+[![tests 69](https://img.shields.io/badge/tests-69-2a78d6)](#tests-coverage-and-receipts)
 [![coverage 92%](https://img.shields.io/badge/coverage-92%25-2a78d6)](#tests-coverage-and-receipts)
 [![numbers machine checked](https://img.shields.io/badge/numbers-machine%20checked-1baf7a)](#every-number-here-is-checked-by-ci)
 [![salting won 0 of 16 cells](https://img.shields.io/badge/salting%20won-0%20of%2016%20cells-e34948)](#what-actually-won)
@@ -156,7 +156,7 @@ pip install -e ".[dev,spark]"                        # add the harness
 skewdoc diagnose data/fixtures/join-naive-noaqe      # the committed skewed run
 skewdoc diagnose <your-event-log> --html report.html --fail-on-skew
 skewdoc compare --workload join_skew                 # needs Spark
-make verify                                          # lint, 68 tests, and every number re-measured
+make verify                                          # lint, 69 tests, and every number re-measured
 ```
 
 `skewdoc diagnose --fail-on-skew` exits 1 when a stage is skewed, which makes it usable as a CI gate on a job's own log. `make help` lists every target.
@@ -170,7 +170,7 @@ make verify                                          # lint, 68 tests, and every
 | Deterministic data generation | The workloads | Hot/tail assignment from a hash of the row id, not an RNG, so partitions are byte-identical between runs and a before/after is a comparison rather than a coincidence |
 | `zstandard`, optional `lz4` | Reading compressed logs | Spark 4 compresses event logs by default; the reader dispatches on extension and names the missing package instead of failing with a Unicode error |
 | Hand-written inline SVG | The per-task chart | The report stays one self-contained file, and the diagnosis path keeps zero plotting dependencies |
-| pytest with a `spark` marker | 68 tests and 92% line coverage | The suite runs on a machine with no JVM; the marked tests prove the format written is the format read |
+| pytest with a `spark` marker | 69 tests and 92% line coverage | The suite runs on a machine with no JVM; the marked tests prove the format written is the format read |
 | ruff | Lint and import order | One fast tool on every commit |
 | Playwright with Chromium, ffmpeg | Screenshots and the demo video | Every image is rendered from real output, so the documentation cannot drift from the behaviour |
 
@@ -189,7 +189,7 @@ Two more properties matter for trust:
 
 ## Tests, coverage, and receipts
 
-68 tests and 92% line coverage, measured with `pytest --cov=skewdoc` — the 90% pytest prints in the terminal is the blend of line and branch coverage, and both are in `docs/metrics.json` so a reader comparing them finds the difference explained rather than wondering about it. Two tests are marked `spark` and run real Spark jobs; the rest need no JVM, so CI runs the whole diagnosis path on three Python versions without one and the Spark job separately.
+69 tests and 92% line coverage, measured with `pytest --cov=skewdoc` — the 90% pytest prints in the terminal is the blend of line and branch coverage, and both are in `docs/metrics.json` so a reader comparing them finds the difference explained rather than wondering about it. Two tests are marked `spark` and run real Spark jobs; the rest need no JVM, so CI runs the whole diagnosis path on three Python versions without one and the Spark job separately.
 
 The parser is tested against **real committed event logs** rather than hand-written JSON, because a synthetic fixture encodes what I believed the format was, and the interesting bugs live in what I believed wrongly. The hand-built logs that do exist cover the failure paths a real log will not produce on demand: a truncated final line, an unknown codec, a stage retry, `events_10` sorting before `events_2`.
 

@@ -83,6 +83,29 @@ def test_only_composable_aggregations_can_be_computed_in_two_stages():
         salted_aggregation(object(), salt=4, aggregation="avg")
 
 
+def test_the_composability_rule_is_checked_before_pyspark_is_needed(monkeypatch):
+    """The rule is a property of the aggregation, so it holds on a machine with no JVM.
+
+    Pinned with pyspark made unimportable rather than by trusting the line order, because that
+    is how this broke: the import sat one line above the validation, so every laptop with
+    pyspark installed ran green while the JVM-free CI job failed on the import.
+    """
+    import builtins
+
+    from skewdoc.fixes import salted_aggregation
+
+    real_import = builtins.__import__
+
+    def refuse_pyspark(name, *args, **kwargs):
+        if name.startswith("pyspark"):
+            raise ModuleNotFoundError("No module named 'pyspark'")
+        return real_import(name, *args, **kwargs)
+
+    monkeypatch.setattr(builtins, "__import__", refuse_pyspark)
+    with pytest.raises(WorkloadError, match="average of averages"):
+        salted_aggregation(object(), salt=4, aggregation="avg")
+
+
 # ------------------------------------------------------------------ rendering
 
 def test_the_markdown_report_names_the_stage_and_the_fix():
